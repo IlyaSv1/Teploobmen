@@ -1,9 +1,29 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model TableViewModel
+@{
+    ViewData["Title"] = "Результаты расчета";
 }
 
-<div class="text-center">
-    Результат расчета: @ViewData["razn"]
+<h2 style="text-align:center; margin-bottom: 20px;">Результаты расчета</h2>
 
-    
-</div>
+<table style="width: 80%; margin: auto; border-collapse: collapse; font-family: Arial, sans-serif;">
+    <thead>
+        <tr style="background-color: #f2f2f2; text-align: center;">
+            <th style="border: 1px solid #ddd; padding: 8px;">Координаты, м</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">Температура окатышей, °C</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">Температура газа, °C</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">Разность температур, °C</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.Rows)
+        {
+            <tr style="text-align: center;">
+                <td style="border: 1px solid #ddd; padding: 8px;">@row.Coordinate</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@row.PelletTemperature</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@row.GasTemperature</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@row.TemperatureDifference</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
