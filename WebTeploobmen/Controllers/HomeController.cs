@@ -18,49 +18,49 @@ namespace WebTeploobmen.Controllers
         {
             return View();
         }
-        public IActionResult Calc(int H0, int tmal, int Tbol, double wg, double Cg, double Cm, double Gm, double av, double Da)
+        public IActionResult Calc(CalcModel model)
         {
-            var S = Math.PI * Math.Pow(Da / 2,2);
+            var S = Math.PI * Math.Pow(model.Da / 2, 2);
+            var m = model.Gm * model.Cm / (model.Wg * S * model.Cg);
+            var Y0 = model.Av * model.H0 / (model.Wg * model.Cg) / 1000;
 
-            var m = Gm * Cm / (wg * S * Cg);
+            // Список для хранения строк таблицы
+            var tableRows = new List<TableRow>();
 
-            var Y0 = av * H0 / (wg * Cg) / 1000;
+            for (double y = 0; y <= model.H0; y += 0.5)
+            {
+                var Y = model.Av * y / (model.Wg * model.Cg) / 1000;
 
-            //var otn_vis = 1 - m * Math.Exp(-(1 - m) * Y0 / m);
+                // Формула 2
+                var f2 = 1 - Math.Exp((m - 1) * Y / m);
 
-            var ymal = 3; //исправить
+                // Формула 3
+                var f3 = 1 - m * Math.Exp((m - 1) * Y / m);
 
-            var Y = av * ymal / (wg * Cg) / 1000;
+                // Формула 4
+                var f4 = f2 / (1 - m * Math.Exp((m - 1) * Y0 / m));
 
-            //Формула 2
-            var f2 = 1 - Math.Exp((m - 1) * Y / m);
+                // Формула 5
+                var f5 = f3 / (1 - m * Math.Exp((m - 1) * Y0 / m));
 
-            //Формула 3
-            var f3 = 1 - m * Math.Exp((m - 1) * Y / m);
+                var tMalRes = Convert.ToInt32(model.Tmal + (model.Tbol - model.Tmal) * f4);
+                var tBolRes = Convert.ToInt32(model.Tmal + (model.Tbol - model.Tmal) * f5);
+                var razn = tMalRes - tBolRes;
 
-            //Формула 4
-            var f4 = f2 / (1 - m * Math.Exp((m - 1) * Y0 / m));
+                // Добавляем строку в таблицу
+                tableRows.Add(new TableRow
+                {
+                    Coordinate = y,
+                    PelletTemperature = tMalRes,
+                    GasTemperature = tBolRes,
+                    TemperatureDifference = razn
+                });
+            }
 
-            //Формула 5
-            var f5 = f3 / (1 - m * Math.Exp((m - 1) * Y0 / m));
-
-            //Формула 6
-
-            var tMalRes = Math.Round(tmal + (Tbol - tmal) * f4);
-
-            //Формула 7
-
-            var TBolRes = Math.Round(tmal + (Tbol - tmal) * f5);
-
-            //Формула 8
-
-            var razn = tMalRes - TBolRes;
-
-
-            ViewData["razn"] = razn;
-
-            return View();
+            // Передаем таблицу в представление
+            return View(new TableViewModel { Rows = tableRows });
         }
+
 
         public IActionResult Privacy()
         {
