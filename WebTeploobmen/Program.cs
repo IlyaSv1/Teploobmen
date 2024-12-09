@@ -1,7 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using WebTeploobmen.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<TeploobmenContext>(o => o.UseSqlite("Data Source = Teploobmen.db;"));
 
 var app = builder.Build();
 
