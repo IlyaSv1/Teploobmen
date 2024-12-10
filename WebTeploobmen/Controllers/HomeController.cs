@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Reflection;
+using WebTeploobmen.Data;
 using WebTeploobmen.Models;
 
 namespace WebTeploobmen.Controllers
@@ -9,9 +10,12 @@ namespace WebTeploobmen.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly TeploobmenContext _context;
+
+        public HomeController(ILogger<HomeController> logger, TeploobmenContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -56,6 +60,20 @@ namespace WebTeploobmen.Controllers
                     TemperatureDifference = razn
                 });
             }
+
+            _context.Variants.Add(new Variant
+            {
+                H0 = model.H0,
+                Tmal = model.Tmal,
+                Tbol = model.Tbol,
+                Wg = model.Wg,
+                Cg = model.Cg,
+                Cm = model.Cm,
+                Gm = model.Gm,
+                Av = model.Av,
+                Da = model.Da
+            });
+            _context.SaveChanges();
 
             // Передаем таблицу в представление
             return View(new TableViewModel { Rows = tableRows });
