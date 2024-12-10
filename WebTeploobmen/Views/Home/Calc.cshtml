@@ -27,3 +27,45 @@
     </tbody>
 </table>
 
+<div class="text-start  ">
+    <form action="/home/calc" method="post">
+
+        <div class="mb-3">
+            <label for="H0" class="form-label">Высота слоя</label>
+            <input type="text" name="model.H0" class="form-control" id="H0">
+        </div>
+        <div class="mb-3">
+            <label for="tmal" class="form-label">Начальная температура окатышей</label>
+            <input type="text" name="model.tmal" class="form-control" id="tmal" />
+        </div>
+        <div class="mb-3">
+            <label for="Tbol" class="form-label">Начальная температура воздуха</label>
+            <input type="text" name="model.Tbol" class="form-control" id="Tbol" />
+        </div>
+        <div class="mb-3">
+            <label for="wg" class="form-label">Скорость воздуха на свободное сечение шахты</label>
+            <input type="text" name="model.wg" class="form-control" id="wg" />
+        </div>
+        <div class="mb-3">
+            <label for="Cg" class="form-label">Средняя теплоемкость воздуха</label>
+            <input type="text" name="model.Cg" class="form-control" id="Cg" />
+        </div>
+        <div class="mb-3">
+            <label for="Cm" class="form-label">Расход окатышей</label>
+            <input type="text" name="model.Cm" class="form-control" id="Cm" />
+        </div>
+        <div class="mb-3">
+            <label for="Gm" class="form-label">Теплоемкость окатышей</label>
+            <input type="text" name="model.Gm" class="form-control" id="Gm" />
+        </div>
+        <div class="mb-3">
+            <label for="Da" class="form-label">Диаметр аппарата</label>
+            <input type="text" name="model.Da" class="form-control" id="Da" />
+        </div>
+        <div class="mb-3">
+            <label for="av" class="form-label">Объемный коэффициент теплоотдачи</label>
+            <input type="text" name="model.av" class="form-control" id="av" />
+        </div>
+        <button class="btn btn-primary">Рассчитать</button>
+    </form>
+</div>

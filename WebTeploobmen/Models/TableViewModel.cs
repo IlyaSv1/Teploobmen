@@ -2,7 +2,7 @@
 {
     public class TableViewModel
     {
-        public List<TableRow> Rows { get; set; }
+        public List<TableRow> Rows { get; set; } = new List<TableRow>();
     }
 
 }

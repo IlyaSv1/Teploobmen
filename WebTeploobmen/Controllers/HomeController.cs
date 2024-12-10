@@ -20,8 +20,18 @@ namespace WebTeploobmen.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var variants = _context.Variants.ToList();
+
+            return View(variants);
         }
+
+        [HttpGet]
+        public IActionResult Calc()
+        {
+            return View(new TableViewModel());
+        }
+
+            [HttpPost]
         public IActionResult Calc(CalcModel model)
         {
             var S = Math.PI * Math.Pow(model.Da / 2, 2);
