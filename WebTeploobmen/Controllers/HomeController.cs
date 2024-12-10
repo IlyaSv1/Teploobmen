@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Reflection;
 using WebTeploobmen.Data;
@@ -26,12 +27,43 @@ namespace WebTeploobmen.Controllers
         }
 
         [HttpGet]
-        public IActionResult Calc()
+        public IActionResult Delete(int id)
         {
-            return View(new TableViewModel());
+            var variant = _context.Variants.FirstOrDefault(x => x.Id == id);
+
+            if(variant != null)
+            {
+                _context.Variants.Remove(variant);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
         }
 
-            [HttpPost]
+        [HttpGet]
+        public IActionResult Calc(int id)
+        {
+            var variant = _context.Variants.FirstOrDefault(x => x.Id == id);
+            var tableViewModel = new TableViewModel();
+            var homeCalcViewModel = new HomeCalcViewModel();
+
+            if (variant != null)
+            {
+                homeCalcViewModel.H0 = variant.H0;
+                homeCalcViewModel.Tmal = variant.Tmal;
+                homeCalcViewModel.Tbol = variant.Tbol;
+                homeCalcViewModel.Wg = variant.Wg;
+                homeCalcViewModel.Cg = variant.Cg;
+                homeCalcViewModel.Cm = variant.Cm;
+                homeCalcViewModel.Gm = variant.Gm;
+                homeCalcViewModel.Av = variant.Av;
+                homeCalcViewModel.Da = variant.Da;
+            }
+
+            return View(new Tuple<TableViewModel, HomeCalcViewModel>(tableViewModel, homeCalcViewModel));
+        }
+
+        [HttpPost]
         public IActionResult Calc(CalcModel model)
         {
             var S = Math.PI * Math.Pow(model.Da / 2, 2);
@@ -86,7 +118,7 @@ namespace WebTeploobmen.Controllers
             _context.SaveChanges();
 
             // Передаем таблицу в представление
-            return View(new TableViewModel { Rows = tableRows });
+            return View(new Tuple<TableViewModel, HomeCalcViewModel>(new TableViewModel { Rows = tableRows }, new HomeCalcViewModel()));
         }
 
 

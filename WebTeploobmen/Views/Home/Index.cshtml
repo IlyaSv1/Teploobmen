@@ -3,6 +3,8 @@
     ViewData["Title"] = "Home Page";
 }
 
+<a href="/home/calc/" class="btn btn-primary">Новый расчет</a>
+
 <table class="table-hover"
     <tr>
         <th>Высота слоя</th>
@@ -28,7 +30,7 @@
             <td>@item.Da</td>
             <td>@item.Av</td>
             <td>
-
+                    <a href="/home/calc/@item.Id">Открыть</a> <a href="/home/delete/@item.Id">Удалить</a>
             </td>
         </tr>
     }
