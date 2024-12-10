@@ -6,6 +6,8 @@ namespace WebTeploobmen.Data
     {
         public DbSet<Variant> Variants { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         public TeploobmenContext(DbContextOptions<TeploobmenContext> options) : base(options)
         {
 
