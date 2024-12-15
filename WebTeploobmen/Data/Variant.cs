@@ -6,6 +6,7 @@ namespace WebTeploobmen.Data
     {
         [Key]
         public int Id { get; set; }
+        public int? UserId { get; set; }
         public int H0 { get; set; }
         public int Tmal { get; set; }
         public int Tbol { get; set; }

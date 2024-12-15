@@ -37,8 +37,8 @@ namespace WebTeploobmen.Controllers
             // Если пользователь найден, создаем ClaimsIdentity и выполняем вход
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.Login),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            new("UserId", user.Id.ToString()),
+            new Claim(ClaimTypes.Name,login),
         };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Reflection;
+using System.Security.Claims;
 using WebTeploobmen.Data;
 using WebTeploobmen.Models;
 
@@ -21,7 +22,9 @@ namespace WebTeploobmen.Controllers
 
         public IActionResult Index()
         {
-            var variants = _context.Variants.ToList();
+            var variants = _context.Variants
+                .Where(x => x.UserId == null || x.UserId == GetUserId())
+                .ToList();
 
             return View(variants);
         }
@@ -29,7 +32,7 @@ namespace WebTeploobmen.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var variant = _context.Variants.FirstOrDefault(x => x.Id == id);
+            var variant = _context.Variants.FirstOrDefault(x => x.Id == id && (x.UserId == GetUserId() || x.UserId == null));
 
             if(variant != null)
             {
@@ -43,7 +46,7 @@ namespace WebTeploobmen.Controllers
         [HttpGet]
         public IActionResult Calc(int id)
         {
-            var variant = _context.Variants.FirstOrDefault(x => x.Id == id);
+            var variant = _context.Variants.FirstOrDefault(x => x.Id == id && (x.UserId == GetUserId() || x.UserId == null));
             var tableViewModel = new TableViewModel();
             var homeCalcViewModel = new HomeCalcViewModel();
 
@@ -103,8 +106,10 @@ namespace WebTeploobmen.Controllers
                 });
             }
 
+
             _context.Variants.Add(new Variant
             {
+                UserId = GetUserId(),
                 H0 = model.H0,
                 Tmal = model.Tmal,
                 Tbol = model.Tbol,
@@ -119,6 +124,14 @@ namespace WebTeploobmen.Controllers
 
             // Передаем таблицу в представление
             return View(new Tuple<TableViewModel, HomeCalcViewModel>(new TableViewModel { Rows = tableRows }, new HomeCalcViewModel()));
+        }
+
+        private int? GetUserId()
+        {
+            var userIdStr = User.FindFirst("UserId")?.Value ?? "0";
+            int? userId = userIdStr == null ? null : int.Parse(userIdStr);
+
+            return userId;
         }
 
 
