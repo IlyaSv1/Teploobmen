@@ -22,12 +22,14 @@ namespace WebTeploobmen.Controllers
 
         public IActionResult Index()
         {
+            var userId = GetUserId();
             var variants = _context.Variants
-                .Where(x => x.UserId == null || x.UserId == GetUserId())
+                .Where(x => x.UserId == null || x.UserId == userId)
                 .ToList();
 
             return View(variants);
         }
+
 
 
         [HttpGet]
@@ -131,9 +133,10 @@ namespace WebTeploobmen.Controllers
 
         private int? GetUserId()
         {
-            var userIdStr = User.FindFirst("UserId")?.Value;
-            return string.IsNullOrEmpty(userIdStr) ? null : int.Parse(userIdStr);
+            var userIdStr = User.FindFirst("UserId")?.Value; 
+            return string.IsNullOrEmpty(userIdStr) ? (int?)null : int.Parse(userIdStr);
         }
+
 
 
 

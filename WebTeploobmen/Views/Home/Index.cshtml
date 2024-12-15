@@ -1,39 +1,46 @@
 ﻿@model List<Variant>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Главная";
 }
 
-<a href="/home/calc/" class="btn btn-primary">Новый расчет</a>
+<div class="container">
+    <h1 class="text-center text-dark my-4">Расчеты теплопередачи</h1>
+    <a href="/home/calc" class="btn btn-primary mb-3">Добавить новый расчет</a>
 
-<table class="table-hover"
-    <tr>
-        <th>Высота слоя</th>
-        <th>Начальная температура окатышей</th>
-        <th>Начальная температура воздуха</th>
-        <th>Скорость воздуха на свободное сечение шахты</th>
-        <th>Средняя теплоемкость воздуха</th>
-        <th>Расход окатышей</th>
-        <th>Теплоемкость окатышей</th>
-        <th>Диаметр аппарата</th>
-        <th>Объемный коэффициент теплоотдачи</th>
-    </tr>
-    @foreach(var item in Model)
-    {
-        <tr>
-            <td>@item.H0</td>
-            <td>@item.Tmal</td>
-            <td>@item.Tbol</td>
-            <td>@item.Wg</td>
-            <td>@item.Cg</td>
-            <td>@item.Cm</td>
-            <td>@item.Gm</td>
-            <td>@item.Da</td>
-            <td>@item.Av</td>
-            <td>
-                    <a href="/home/calc/@item.Id">Открыть</a> <a href="/home/delete/@item.Id">Удалить</a>
-            </td>
-        </tr>
-    }
-</table>
-
-
+    <table class="table table-hover table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>Высота слоя, м</th>
+                <th>Температура окатышей, °C</th>
+                <th>Температура воздуха, °C</th>
+                <th>Скорость воздуха, м/с</th>
+                <th>Теплоемкость воздуха, Дж/(кг·К)</th>
+                <th>Расход окатышей, кг/с</th>
+                <th>Теплоемкость окатышей, Дж/(кг·К)</th>
+                <th>Диаметр аппарата, м</th>
+                <th>Коэффициент теплоотдачи, Вт/(м³·К)</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.H0</td>
+                    <td>@item.Tmal</td>
+                    <td>@item.Tbol</td>
+                    <td>@item.Wg</td>
+                    <td>@item.Cg</td>
+                    <td>@item.Cm</td>
+                    <td>@item.Gm</td>
+                    <td>@item.Da</td>
+                    <td>@item.Av</td>
+                    <td>
+                        <a href="/home/calc/@item.Id" class="btn btn-primary btn-sm">Открыть</a>
+                        <a href="/home/delete/@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

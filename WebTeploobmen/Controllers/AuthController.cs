@@ -22,33 +22,32 @@ namespace WebTeploobmen.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-            [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Index(string login, string password)
         {
             var user = _context.Users.FirstOrDefault(x => x.Login == login && x.Password == password);
 
             if (user == null)
             {
-                // Если пользователь не найден, возвращаем сообщение об ошибке
-                ModelState.AddModelError(string.Empty, "Неверный логин или пароль");
+                ModelState.AddModelError(string.Empty, "Неверный логин или пароль.");
                 return View();
             }
 
-            // Если пользователь найден, создаем ClaimsIdentity и выполняем вход
             var claims = new List<Claim>
-        {
-            new("UserId", user.Id.ToString()),
-            new Claim(ClaimTypes.Name,login),
-        };
+    {
+        new("UserId", user.Id.ToString()),
+        new Claim(ClaimTypes.Name, login),
+    };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            // Перенаправляем на главную страницу
             return RedirectToAction("Index", "Home");
         }
+
+
 
         [HttpGet]
         public IActionResult Index()
