@@ -29,12 +29,13 @@ namespace WebTeploobmen.Controllers
             return View(variants);
         }
 
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
             var variant = _context.Variants.FirstOrDefault(x => x.Id == id && (x.UserId == GetUserId() || x.UserId == null));
 
-            if(variant != null)
+            if (variant != null)
             {
                 _context.Variants.Remove(variant);
                 _context.SaveChanges();
@@ -42,6 +43,7 @@ namespace WebTeploobmen.Controllers
 
             return RedirectToAction("Index");
         }
+
 
         [HttpGet]
         public IActionResult Calc(int id)
@@ -122,17 +124,17 @@ namespace WebTeploobmen.Controllers
             });
             _context.SaveChanges();
 
+
             // Передаем таблицу в представление
             return View(new Tuple<TableViewModel, HomeCalcViewModel>(new TableViewModel { Rows = tableRows }, new HomeCalcViewModel()));
         }
 
         private int? GetUserId()
         {
-            var userIdStr = User.FindFirst("UserId")?.Value ?? "0";
-            int? userId = userIdStr == null ? null : int.Parse(userIdStr);
-
-            return userId;
+            var userIdStr = User.FindFirst("UserId")?.Value;
+            return string.IsNullOrEmpty(userIdStr) ? null : int.Parse(userIdStr);
         }
+
 
 
         public IActionResult Privacy()
