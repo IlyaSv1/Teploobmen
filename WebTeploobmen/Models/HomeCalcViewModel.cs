@@ -14,5 +14,7 @@
         public double? Gm { get; set; }
         public double? Av { get; set; }
         public double? Da { get; set; }
+        public List<double> TempMaterial { get; set; } = [260, 200, 170, 140, 120, 110];
+        public List<double> TempGas { get; set; } = [100, 120, 150, 190, 250];
     }
 }

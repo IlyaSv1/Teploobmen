@@ -127,8 +127,14 @@ namespace WebTeploobmen.Controllers
             _context.SaveChanges();
 
 
-            // Передаем таблицу в представление
-            return View(new Tuple<TableViewModel, HomeCalcViewModel>(new TableViewModel { Rows = tableRows }, new HomeCalcViewModel()));
+            return View(new Tuple<TableViewModel, HomeCalcViewModel>(
+                new TableViewModel
+                {
+                    Rows = tableRows
+                },
+                new HomeCalcViewModel()
+            ));
+
         }
 
         private int? GetUserId()

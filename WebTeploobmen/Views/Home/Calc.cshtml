@@ -29,6 +29,54 @@
             }
         </tbody>
     </table>
+
+    <div id="chart" style="width: 80%; margin: 50px auto;"></div>
+
+    <script>
+        // Подготовка данных для графика
+        var coordinates = @Html.Raw(Json.Serialize(Model.Item1.Rows.Select(row => row.Coordinate)));
+        var pelletTemperatures = @Html.Raw(Json.Serialize(Model.Item1.Rows.Select(row => row.PelletTemperature)));
+        var gasTemperatures = @Html.Raw(Json.Serialize(Model.Item1.Rows.Select(row => row.GasTemperature)));
+
+        // Добавляем подписи к данным
+        pelletTemperatures.unshift('Температура окатышей, °C');
+        gasTemperatures.unshift('Температура газа, °C');
+        coordinates.unshift('Координаты, м');
+
+        // Генерация графика
+        var chart = c3.generate({
+            bindto: '#chart',
+            data: {
+                x: 'Координаты, м',
+                columns: [
+                    coordinates,
+                    pelletTemperatures,
+                    gasTemperatures
+                ]
+            },
+            axis: {
+                x: {
+                    label: 'Координаты, м',
+                    tick: {
+                        fit: true,
+                    }
+                },
+                y: {
+                    label: 'Температура, °C',
+                }
+            },
+            point: {
+                show: true
+            },
+            legend: {
+                position: 'right'
+            },
+            tooltip: {
+                grouped: false
+            }
+        });
+    </script>
+
 }
 else
 {
