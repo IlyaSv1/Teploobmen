@@ -6,35 +6,39 @@
 
 @if (Model.Item1.Rows != null && Model.Item1.Rows.Any())
 {
-    <h2 style="text-align:center; margin-bottom: 20px;">Результаты расчета</h2>
+    <h2 class="text-center mb-4">Результаты расчета</h2>
 
-    <table style="width: 80%; margin: auto; border-collapse: collapse; font-family: Arial, sans-serif;">
-        <thead>
-            <tr style="background-color: #f2f2f2; text-align: center;">
-                <th style="border: 1px solid #ddd; padding: 8px;">Координаты, м</th>
-                <th style="border: 1px solid #ddd; padding: 8px;">Температура окатышей, °C</th>
-                <th style="border: 1px solid #ddd; padding: 8px;">Температура газа, °C</th>
-                <th style="border: 1px solid #ddd; padding: 8px;">Разность температур, °C</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var row in Model.Item1.Rows)
-            {
-                <tr style="text-align: center;">
-                    <td style="border: 1px solid #ddd; padding: 8px;">@row.Coordinate</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">@row.PelletTemperature</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">@row.GasTemperature</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">@row.TemperatureDifference</td>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="font-family: Arial, sans-serif;">
+            <thead class="thead-light">
+                <tr class="text-center">
+                    <th>Координаты, м</th>
+                    <th>Температура окатышей, °C</th>
+                    <th>Температура газа, °C</th>
+                    <th>Разность температур, °C</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.Item1.Rows)
+                {
+                    <tr class="text-center">
+                        <td>@row.Coordinate</td>
+                        <td>@row.PelletTemperature</td>
+                        <td>@row.GasTemperature</td>
+                        <td>@row.TemperatureDifference</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
-    <!-- График температуры окатышей и газа -->
-    <div id="temperatureChart" style="width: 80%; margin: 50px auto;"></div>
+    <div class="my-5">
+        <!-- График температуры окатышей и газа -->
+        <div id="temperatureChart" class="chart-container"></div>
 
-    <!-- График разности температур -->
-    <div id="differenceChart" style="width: 80%; margin: 50px auto;"></div>
+        <!-- График разности температур -->
+        <div id="differenceChart" class="chart-container"></div>
+    </div>
 
     <script>
         var coordinates = @Html.Raw(Json.Serialize(Model.Item1.Rows.Select(row => row.Coordinate)));
@@ -116,45 +120,49 @@
 }
 else
 {
-    <h2 style="text-align:center; margin-bottom: 20px;">Новый расчет</h2>
-    <!-- Форма для нового расчета, если нет результатов -->
+    <h2 class="text-center mb-4">Новый расчет</h2>
+
+    <!-- Форма для нового расчета -->
     <form action="/home/calc" method="post">
-        <div class="mb-3">
-            <label for="H0" class="form-label">Высота слоя</label>
-            <input type="text" name="model.H0" class="form-control" id="H0" value="@Model.Item2.H0">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="H0" class="form-label">Высота слоя (м)</label>
+                <input type="text" name="model.H0" class="form-control" id="H0" value="@Model.Item2.H0" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="tmal" class="form-label">Начальная температура окатышей (°C)</label>
+                <input type="text" name="model.Tmal" class="form-control" id="tmal" value="@Model.Item2.Tmal" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="Tbol" class="form-label">Начальная температура воздуха (°C)</label>
+                <input type="text" name="model.Tbol" class="form-control" id="Tbol" value="@Model.Item2.Tbol" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="wg" class="form-label">Скорость воздуха на свободное сечение шахты (м/с)</label>
+                <input type="text" name="model.Wg" class="form-control" id="wg" value="@Model.Item2.Wg" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="Cg" class="form-label">Средняя теплоемкость воздуха (Дж/(кг·К))</label>
+                <input type="text" name="model.Cg" class="form-control" id="Cg" value="@Model.Item2.Cg" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="Cm" class="form-label">Расход окатышей (кг/с)</label>
+                <input type="text" name="model.Cm" class="form-control" id="Cm" value="@Model.Item2.Cm" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="Gm" class="form-label">Теплоемкость окатышей (Дж/(кг·К))</label>
+                <input type="text" name="model.Gm" class="form-control" id="Gm" value="@Model.Item2.Gm" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="Da" class="form-label">Диаметр аппарата (м)</label>
+                <input type="text" name="model.Da" class="form-control" id="Da" value="@Model.Item2.Da" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="av" class="form-label">Объемный коэффициент теплоотдачи (Вт/м³·К)</label>
+                <input type="text" name="model.Av" class="form-control" id="av" value="@Model.Item2.Av" required />
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="tmal" class="form-label">Начальная температура окатышей</label>
-            <input type="text" name="model.Tmal" class="form-control" id="tmal" value="@Model.Item2.Tmal" />
-        </div>
-        <div class="mb-3">
-            <label for="Tbol" class="form-label">Начальная температура воздуха</label>
-            <input type="text" name="model.Tbol" class="form-control" id="Tbol" value="@Model.Item2.Tbol" />
-        </div>
-        <div class="mb-3">
-            <label for="wg" class="form-label">Скорость воздуха на свободное сечение шахты</label>
-            <input type="text" name="model.Wg" class="form-control" id="wg" value="@Model.Item2.Wg" />
-        </div>
-        <div class="mb-3">
-            <label for="Cg" class="form-label">Средняя теплоемкость воздуха</label>
-            <input type="text" name="model.Cg" class="form-control" id="Cg" value="@Model.Item2.Cg" />
-        </div>
-        <div class="mb-3">
-            <label for="Cm" class="form-label">Расход окатышей</label>
-            <input type="text" name="model.Cm" class="form-control" id="Cm" value="@Model.Item2.Cm" />
-        </div>
-        <div class="mb-3">
-            <label for="Gm" class="form-label">Теплоемкость окатышей</label>
-            <input type="text" name="model.Gm" class="form-control" id="Gm" value="@Model.Item2.Gm" />
-        </div>
-        <div class="mb-3">
-            <label for="Da" class="form-label">Диаметр аппарата</label>
-            <input type="text" name="model.Da" class="form-control" id="Da" value="@Model.Item2.Da" />
-        </div>
-        <div class="mb-3">
-            <label for="av" class="form-label">Объемный коэффициент теплоотдачи</label>
-            <input type="text" name="model.Av" class="form-control" id="av" value="@Model.Item2.Av" />
-        </div>
-        <button class="btn btn-primary">Рассчитать</button>
+
+        <button class="btn btn-success btn-block">Рассчитать</button>
     </form>
 }

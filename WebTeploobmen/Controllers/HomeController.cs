@@ -98,7 +98,7 @@ namespace WebTeploobmen.Controllers
 
                 var tMalRes = Convert.ToInt32(model.Tmal + (model.Tbol - model.Tmal) * f4);
                 var tBolRes = Convert.ToInt32(model.Tmal + (model.Tbol - model.Tmal) * f5);
-                var razn = tMalRes - tBolRes;
+                var razn = Math.Abs(tMalRes - tBolRes);
 
                 // Добавляем строку в таблицу
                 tableRows.Add(new TableRow
@@ -109,6 +109,7 @@ namespace WebTeploobmen.Controllers
                     TemperatureDifference = razn
                 });
             }
+
 
             _context.Variants.Add(new Variant
             {
@@ -125,15 +126,10 @@ namespace WebTeploobmen.Controllers
             });
             _context.SaveChanges();
 
-            return View(new Tuple<TableViewModel, HomeCalcViewModel>(
-                new TableViewModel
-                {
-                    Rows = tableRows
-                },
-                new HomeCalcViewModel()
-            ));
-        }
 
+            // Передаем таблицу в представление
+            return View(new Tuple<TableViewModel, HomeCalcViewModel>(new TableViewModel { Rows = tableRows }, new HomeCalcViewModel()));
+        }
 
         private int? GetUserId()
         {
