@@ -110,26 +110,42 @@ namespace WebTeploobmen.Controllers
                 });
             }
 
+            // Проверка на наличие дубликата
+            bool exists = _context.Variants.Any(v =>
+                v.UserId == GetUserId() &&
+                v.H0 == model.H0 &&
+                v.Tmal == model.Tmal &&
+                v.Tbol == model.Tbol &&
+                Math.Abs(v.Wg - model.Wg) < 0.0001 && // Для double используем погрешность
+                Math.Abs(v.Cg - model.Cg) < 0.0001 &&
+                Math.Abs(v.Cm - model.Cm) < 0.0001 &&
+                Math.Abs(v.Gm - model.Gm) < 0.0001 &&
+                Math.Abs(v.Av - model.Av) < 0.0001 &&
+                Math.Abs(v.Da - model.Da) < 0.0001);
 
-            _context.Variants.Add(new Variant
+            if (!exists)
             {
-                UserId = GetUserId(),
-                H0 = model.H0,
-                Tmal = model.Tmal,
-                Tbol = model.Tbol,
-                Wg = model.Wg,
-                Cg = model.Cg,
-                Cm = model.Cm,
-                Gm = model.Gm,
-                Av = model.Av,
-                Da = model.Da
-            });
-            _context.SaveChanges();
-
+                // Добавляем запись, только если дубликата нет
+                _context.Variants.Add(new Variant
+                {
+                    UserId = GetUserId(),
+                    H0 = model.H0,
+                    Tmal = model.Tmal,
+                    Tbol = model.Tbol,
+                    Wg = model.Wg,
+                    Cg = model.Cg,
+                    Cm = model.Cm,
+                    Gm = model.Gm,
+                    Av = model.Av,
+                    Da = model.Da
+                });
+                _context.SaveChanges();
+            }
 
             // Передаем таблицу в представление
             return View(new Tuple<TableViewModel, HomeCalcViewModel>(new TableViewModel { Rows = tableRows }, new HomeCalcViewModel()));
         }
+
 
         private int? GetUserId()
         {
