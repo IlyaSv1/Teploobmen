@@ -110,7 +110,6 @@ namespace WebTeploobmen.Controllers
                 });
             }
 
-
             _context.Variants.Add(new Variant
             {
                 UserId = GetUserId(),
@@ -126,7 +125,6 @@ namespace WebTeploobmen.Controllers
             });
             _context.SaveChanges();
 
-
             return View(new Tuple<TableViewModel, HomeCalcViewModel>(
                 new TableViewModel
                 {
@@ -134,8 +132,8 @@ namespace WebTeploobmen.Controllers
                 },
                 new HomeCalcViewModel()
             ));
-
         }
+
 
         private int? GetUserId()
         {

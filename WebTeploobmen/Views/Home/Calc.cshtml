@@ -30,22 +30,25 @@
         </tbody>
     </table>
 
-    <div id="chart" style="width: 80%; margin: 50px auto;"></div>
+    <!-- График температуры окатышей и газа -->
+    <div id="temperatureChart" style="width: 80%; margin: 50px auto;"></div>
+
+    <!-- График разности температур -->
+    <div id="differenceChart" style="width: 80%; margin: 50px auto;"></div>
 
     <script>
-        // Подготовка данных для графика
         var coordinates = @Html.Raw(Json.Serialize(Model.Item1.Rows.Select(row => row.Coordinate)));
         var pelletTemperatures = @Html.Raw(Json.Serialize(Model.Item1.Rows.Select(row => row.PelletTemperature)));
         var gasTemperatures = @Html.Raw(Json.Serialize(Model.Item1.Rows.Select(row => row.GasTemperature)));
+        var temperatureDifferences = @Html.Raw(Json.Serialize(Model.Item1.Rows.Select(row => row.TemperatureDifference)));
 
-        // Добавляем подписи к данным
         pelletTemperatures.unshift('Температура окатышей, °C');
         gasTemperatures.unshift('Температура газа, °C');
         coordinates.unshift('Координаты, м');
 
-        // Генерация графика
-        var chart = c3.generate({
-            bindto: '#chart',
+        // Генерация графика температуры окатышей и газа
+        var temperatureChart = c3.generate({
+            bindto: '#temperatureChart',
             data: {
                 x: 'Координаты, м',
                 columns: [
@@ -75,8 +78,41 @@
                 grouped: false
             }
         });
-    </script>
 
+        temperatureDifferences.unshift('Разность температур, °C');
+
+        // Генерация графика разности температур
+        var differenceChart = c3.generate({
+            bindto: '#differenceChart',
+            data: {
+                x: 'Координаты, м',
+                columns: [
+                    coordinates,
+                    temperatureDifferences
+                ]
+            },
+            axis: {
+                x: {
+                    label: 'Координаты, м',
+                    tick: {
+                        fit: true,
+                    }
+                },
+                y: {
+                    label: 'Разность температур, °C',
+                }
+            },
+            point: {
+                show: true
+            },
+            legend: {
+                position: 'right'
+            },
+            tooltip: {
+                grouped: false
+            }
+        });
+    </script>
 }
 else
 {
@@ -89,7 +125,7 @@ else
         </div>
         <div class="mb-3">
             <label for="tmal" class="form-label">Начальная температура окатышей</label>
-            <input type="text" name="model.tmal" class="form-control" id="tmal" value="@Model.Item2.Tmal" />
+            <input type="text" name="model.Tmal" class="form-control" id="tmal" value="@Model.Item2.Tmal" />
         </div>
         <div class="mb-3">
             <label for="Tbol" class="form-label">Начальная температура воздуха</label>
@@ -97,7 +133,7 @@ else
         </div>
         <div class="mb-3">
             <label for="wg" class="form-label">Скорость воздуха на свободное сечение шахты</label>
-            <input type="text" name="model.wg" class="form-control" id="wg" value="@Model.Item2.Wg" />
+            <input type="text" name="model.Wg" class="form-control" id="wg" value="@Model.Item2.Wg" />
         </div>
         <div class="mb-3">
             <label for="Cg" class="form-label">Средняя теплоемкость воздуха</label>
@@ -117,7 +153,7 @@ else
         </div>
         <div class="mb-3">
             <label for="av" class="form-label">Объемный коэффициент теплоотдачи</label>
-            <input type="text" name="model.av" class="form-control" id="av" value="@Model.Item2.Av" />
+            <input type="text" name="model.Av" class="form-control" id="av" value="@Model.Item2.Av" />
         </div>
         <button class="btn btn-primary">Рассчитать</button>
     </form>
